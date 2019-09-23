@@ -27,7 +27,7 @@ def login():
                 login = Post.query.filter_by(username=uname, password=passw).first()
 
                 if login is not None:
-                        print uname 
+                        print (uname)
                         flash('Logged in successfully.')
                         return redirect(url_for("modulo1.strategyview"))
             
@@ -82,7 +82,7 @@ def strategyview():
         #MYFUNCTION WILL DECIDE THE START TIME AND END TIME FOR THE CHART 
         start_time,end_time = myFunction()
        
-        print start_time,end_time
+        print(start_time,end_time)
 
         # daily_data = Data_loader.MarketData(start_time,end_time)
         tweenty_days = end_time - (86400000*20)
@@ -105,7 +105,7 @@ def strategyview():
                 Stratey_values = [Buying_angle,selling_angle,optimization,relative_angle,stop_order,less_than_buy] 
 
                 if selling_angle == '' and Buying_angle == '':
-                        print '--------------------------------FAILED-----------------------------'
+                        print('--------------------------------FAILED-----------------------------')
                         # FLASH MESSAGE NEEDS TO BE HERE 
                         return jsonify({'Trades_singleday':0,'Metric_values': 0 })
                 
@@ -136,7 +136,7 @@ def strategyview():
                                 # Check if strategy is already applied or not, if not applied apply, if applied save strategy
                                 tweenty_days = end_time - (86400000*20)
                                 sus = applied_or_not(St,start_time,tweenty_days)
-                                print sus
+                                print(sus)
 
                                 if sus ==  'notexist':
                                         # Check if strategy is already applied or not if not applied apply, if applied save strategy
@@ -181,8 +181,8 @@ def strategyview():
                 
                 Data_loader = DataController()
                 data,strategy_names = Data_loader.getStrategies()
-                print 'data',data 
-                print 'Stratey_values',Stratey_values
+                print ('data',data )
+                print ('Stratey_values',Stratey_values)
                 return render_template("page1.html", Metric_values_singleday = Metric_values_singleday,Trades_singleday = Trades_singleday,Performance = Performance,daily_data = daily_data,Buy_flags = Buy_flags,Sell_flags = Sell_flags,
                 strategy_names = strategy_names,Strategy_values =Stratey_values)
 
@@ -202,7 +202,7 @@ def Strategies1():
         if request.method == "POST": 
 
                 # GET THE ID OF A CLICKED STARTEGY AND ADD TO FAVOURITES
-                print 'EXCELLENT '
+                print ('EXCELLENT ')
                 print (request.get_data())
                 # adding strategy to favouites
                 addFav(request.get_data())
@@ -210,8 +210,8 @@ def Strategies1():
                 # get the updated strategies 
                 Data_loader = DataController()
                 data123,strategy_names = Data_loader.getStrategies()
-                print data123
-                return data123
+                print (data123)
+                return (data123)
                 
         else:
                 #HERE LOAD ALL THE STRATEGIES FROM THE STRATEGIES TABLE
@@ -263,7 +263,7 @@ def delete_strategy():
                 
         
 
-                print request.form.get('clicked_strategy')
+                print (request.form.get('clicked_strategy'))
 
                 deletestrategy(request.form.get('clicked_strategy'))
 
