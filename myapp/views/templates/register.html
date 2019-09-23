@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <title>Register</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('modulo1.static', filename ='login.css') }}">
+
+  </head>
+<body>
+    <div class="container">
+      <p style = "font-size:40px;text-align: center; margin-top:20px;"> Sign Up</p>
+        <div class="row" style="margin-top: 40px">
+            <div class="col-sm-6">
+                <form method="POST" name="myForm"  >
+                    <div class="form-group">
+                      <label class="lab-name" for="email">Username : </label>
+                      <input  class="input-cls" style="width:300px; height:32px;" type="text" name="uname" class="form-control" id="uname" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="lab-name" style="margin-top:10px;"for="email">Email : </label>
+                      <input class="input-cls" style="width:300px; height:32px;" type="email" name="mail" class="form-control" id="mail" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="lab-name" style="margin-top:10px;" for="email">Password : </label>
+                      <input class="input-cls" style="width:300px; height:32px;" type="password" name="passw" class="form-control" id="passw"required>
+                    </div>
+                    <button style="margin:30px; width:300px;color:white; height:40px;" type="submit" style="width:300px;" class="btn btn-success">Register</button>
+
+                    <div style="margin-top:0px;">
+                      <p style="margin-left:30px; width:300px;"><a style="color:blue; font-size: 18px;"href="{{ url_for('modulo1.login') }}">Sign In Instead</a></p>
+                      </div>
+  
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>

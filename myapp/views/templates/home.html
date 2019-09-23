@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>xTrade</title>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('modulo1.static', filename ='login.css') }}">
+
+  <link rel="icon" href="data:;base64,iVBORwOKGO=" />
+  
+  
+
+</head>
+<body style = "background-color:#D3D3D3">
+
+<!-- HEADER -->
+
+
+<nav class="navbar navbar-inverse" style="background-color:	#4169E1;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" style="color:white;"href="#">xTrade Analytics</a> 
+      
+      <a class="navbar-brand icon" style="color:white;" href="javascript:void(0);" onclick="Menu_icon()"><i class="fa fa-bars"></i></a>
+
+    </div>
+  </div>
+</nav>
+
+<section>
+
+  <div class = "menu_items" id = "container">
+
+      <div id="first">
+      
+        <div  style="background-color: white;height:330px;">
+
+          <ol class="nav nav-pills nav-stacked">
+           
+              <li id ="uname" style="font-size: 27px;background-color: 	#BEBEBE;" > <a style="color:white;" href="#"> User name </a></li>
+              <li> <a href="{{ url_for('modulo1.strategyview') }}">Strategy view</a></li>
+              <li id="cart"> <a  href="{{ url_for('modulo1.Arena') }}">Arena </a></li>
+              <li> <a href="{{ url_for('modulo1.Strategies1')}}">Strategies</a></li>
+              <li> <a href="{{ url_for('modulo1.settings') }}">Settings</a></li>
+              <li> <a href="{{ url_for('modulo1.logout') }}">Logout</a></li>
+
+          </ol>
+          
+        </div>
+
+        <br>
+
+        <div style="background-color: white;">
+
+            <ol class="nav nav-pills nav-stacked">  
+               
+                <li style="font-size: 27px;background-color: 	#BEBEBE;" > <a style="color:white;" href="#">Strategies</a></li>
+                <li id="saved_strategy0"> <a href="{{ url_for('modulo1.Strategies1') }}">     -       </a></li>
+                <li id="saved_strategy1"> <a href="{{ url_for('modulo1.Strategies1') }}">     -       </a></li>
+                <li id="saved_strategy2"> <a href="{{ url_for('modulo1.Strategies1') }}">     -       </a></li>
+                <li id="saved_strategy3"> <a href="{{ url_for('modulo1.Strategies1') }}">     -        </a></li>
+            </ol>
+           
+
+        </div><br>
+
+        <div style="background-color: white;height:230px;">
+
+            <ol class="nav nav-pills nav-stacked">
+                <li style="font-size: 27px;background-color: 	#BEBEBE;" > <a style="color:white;" href="#">Quick Links</a></li>
+                <li> <a href="{{ url_for('modulo1.strategyview') }}">New Strategy</a></li>
+                <li> <a href="{{ url_for('modulo1.Arena') }}">Top Strategies</a></li>
+            </ol>
+           
+        </div>
+
+        </a>
+
+      </div>
+
+   <div id="second"> 
+     
+        {% block content %}
+        {% endblock %} 
+
+      </div>
+
+  </div>
+
+</section>
+
+<div class="footer">
+    <p class="text-h_f">Footer</p>
+  </div>
+
+  <script>
+  
+function Menu_icon() {
+
+var x = document.getElementById("container");
+if (x.className === "menu_items") {
+    x.className += "responsive";
+
+    console.log(x.className)
+}else {
+  x.className = "menu_items";
+  }
+
+}
+
+
+// CART FUNCTIONALITY
+main = JSON.parse(sessionStorage.getItem("ba"))    
+if (main!== null){
+    n = main.Strategies.length
+    var elem = document.querySelectorAll('#cart');
+    elem[0].children[0].innerHTML = 'Arena('+n+')';
+}
+
+  </script>
+ 
+</body>
+
+</html>

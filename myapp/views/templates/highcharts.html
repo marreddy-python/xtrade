@@ -1,0 +1,226 @@
+<html>
+<head>
+
+        <script src="https://code.jquery.com/jquery-1.8.3.js"></script>
+        <script src="https://code.highcharts.com/stock/highstock.js"></script>
+        <script src="https://code.highcharts.com/stock/highcharts-more.src.js"></script>
+        <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+        <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <div id="realtime-chart"></div>
+  
+</body>
+
+<script>
+
+function myFunction(){
+
+var chartConfig = {
+      chart:{
+        renderTo:'realtime-chart',
+        backgroundColor: 'white',
+        zoomType:'x',
+        height:450,
+        plotBorderColor: '#606063'
+},
+
+  tooltip: {
+    crosshairs: true,
+    shared: true,
+    useHTML: true,
+    hideDelay: 0,
+    enabledIndicators: true,
+ 
+  },
+
+  exporting: {
+            enabled: true,
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG',
+                        'separator',
+                        'downloadCSV',
+                        'downloadXLS',
+                    ],
+                    text: '',
+                    theme: {
+                        fill: '#ddd',
+                        stroke: '#888',
+                        states: {
+                            hover: {
+                                fill: '#fcc',
+                                stroke: '#f00'
+                            },
+                            select: {
+                                fill: '#cfc',
+                                stroke: '#0f0'
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+ 
+  rangeSelector: {
+            allButtonsEnabled: false,
+            buttons: [
+            {
+                type: 'day',
+                text: '1D',
+                count: 1,
+            dataGrouping: {
+                forced: true,
+                units: [['minute', [2]]]
+            },
+            }, 
+            ],
+
+            buttonTheme: {
+                width: 30
+            },
+            selected: 0
+        },
+    
+        plotOptions: {
+        series: {
+        cursor: 'pointer',
+ 
+    }
+},
+
+ series: [{
+            cropThreshold: 0,
+            id: 'means',
+            name: 'Candlestick-Chart',
+            pointInterval: 3600 * 2,
+            data: [],
+            upColor:'white',
+            tooltip: {
+                valueDecimals: 2
+            },
+            
+    },{
+        type:'sma',
+        linkedTo: 'means',
+        color: 'rgb(0, 175, 251)',
+        peroids:10,
+        marker:{
+          enabled:false,
+        }
+       
+    },{
+      type: 'flags',
+      shape: 'circlepin',
+      color:	'#32ea32',
+      fillColor:'#32ea32',
+      width: 16,
+      data: [],
+      onSeries: 'means',
+    
+    },
+    {
+      type: 'flags',
+      shape: 'circlepin',
+      color:	'#fe3232',
+      fillColor:'#fe3232',
+      width: 16,
+      data:[{
+        x: 1565613000000,
+        title: 'S',
+        text: 'Sell'
+      },],
+      onSeries: 'means',
+    }],
+
+navigator:{
+  enabled:false
+  },
+    scrollbar:{
+      enabled:false
+    },
+
+    xAxis: {
+        gridLineWidth: 1,
+        color:'black',
+        labels: {
+              style: {
+                    color: 'black'
+                  },    
+              },
+              //lineColor: '#707073',
+              //minorGridLineColor: 'balck',
+              //tickColor: '#1a2e44'
+    },
+    yAxis: {
+        gridLineWidth: 1,
+        // color:'black',
+        // lineColor: '#707073',
+        GridLineColor: 'black',
+        // tickColor: '#1a2e44',
+    },
+   
+
+  
+};
+
+var data = [];
+var a = []
+var date = new Date();
+
+var end_date = Date.parse(date);
+var start_date = date - 1000 * 60 * 60 * (24 * 10)
+
+
+$.getJSON('https://api.tdameritrade.com/v1/marketdata/TVIX/pricehistory?apikey=AMERITRADES79&periodType=day&frequencyType=minute&frequency=1&endDate='+end_date+'&startDate=' +start_date+ '&needExtendedHoursData=true', function(items) {
+  
+
+    for(var i=0;i<items.candles.length;i++){
+         a.push([items.candles[i].datetime,items.candles[i].open,items.candles[i].high,items.candles[i].low,items.candles[i].close]) 
+    } 
+    data.push(a)
+
+  candles_length = items.candles.length 
+
+  var last_candle_time  = items.candles[candles_length-1].datetime
+
+  chartConfig.series[0].type = 'candlestick';
+  chartConfig.series[0].data = data[0];
+
+
+var d = new Date(last_candle_time);
+var day = d.toDateString()[0]
+
+
+if(day == 'M'){
+chartConfig.rangeSelector.buttons[0].count = 3;
+}
+else{
+  chartConfig.rangeSelector.buttons[0].count = 1;
+}
+
+var chart = $('#realtime-chart').highcharts('StockChart', chartConfig);
+
+});
+  
+}
+
+var ab;
+myFunction();
+ab=setInterval(myFunction,60000);
+
+</script>
+</html>
+

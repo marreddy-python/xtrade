@@ -1,0 +1,567 @@
+
+#first {
+    margin-left :20px;
+    width: 230px; 
+    float: left;
+    height: 840px; 
+    background-color:#D3D3D3;
+}
+
+
+#second {
+    margin-left :20px;
+    width: 1560px;
+    height:840px;
+    float: left;
+    background-color:#D3D3D3;
+}
+ol li{
+    list-style-type: none;
+    font-size: 20px;
+  }
+li a{
+    color:black;
+    display: block;
+    color: #000;
+    text-decoration: none;
+}
+/* Change the link color on hover */
+li a:hover {
+    color: blue;
+    background-color: black   
+  }
+
+.icon{
+    display: none;
+}
+
+/* RESPONSIVE CSS */
+
+@media screen and (max-width:1024px) {
+     
+    #first{
+        width:100%;
+        margin-left :0px; 
+        display: none;
+      }
+
+    .icon{
+        float: right;
+        display: block;
+    }
+
+    .menu_itemsresponsive #first{
+        display:block;
+    }  
+
+    #second {
+        width:100%;
+        margin-left:0px;
+        background-color:#D3D3D3;
+    }
+
+    
+}
+
+/* NORMAL CSS */
+#kinda{
+    width: 1300px; 
+    height : 540px; 
+    border: 2px solid white;
+    float:left;   
+    background-color: white
+}
+
+
+.graph_area{
+    margin:20px;
+    /* position: fixed; */
+    /* position: relative; */
+    
+}
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    margin-right:30px;
+
+  }
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.5s;
+    font-size: 20px;
+    font-weight: bolder;
+  }
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color:#ccc;
+  }
+
+  .tab button.active {
+    background-color: white;
+  }
+
+  #tabvalues{
+      font-size: 20px;   
+      padding:14px 16px;
+      float:right;
+      margin-right: 500px;
+  }
+
+
+.phase{
+    font-size: 20px;
+    text-align: center;
+}
+.page1_tabs{
+    height:60px; 
+    font-size: 10px;
+    width:1280px;
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;   
+}
+
+
+#leftBox {
+    float:left;
+    height:60px;
+    width: 50%; 
+    background-color: white;
+    margin:0;
+}
+
+#rightBox {
+    float:right;
+    height:60px; 
+    width: 50%;
+    background: black;
+}
+
+.tab_view{
+    text-align: center;
+    margin-top:10px;
+    font-size: 30px;
+    
+}
+  
+.summary{
+    width:220px;
+    height:540px; 
+    border: 2px solid white; 
+    float:right;
+    margin-right:30px;
+    background-color: white
+
+}
+
+.arena{
+    height:385px; 
+}
+
+.sum_lbl{
+    font-size:20px; 
+    margin-top:10px;
+    margin-left:10px;
+}
+
+.sum_inp{
+    border: none;
+    font-size:25px;
+    margin-left:10px;
+}
+#sam{
+    padding-left:100px;
+}
+
+
+/* RESPONSIVE CSS */
+@media only screen and (max-width:1024px){
+    #kinda{
+    width:100%;
+    height : 500px; 
+    border: 2px solid white;
+    float:left;  
+    background-color: white
+}
+.graph_area{
+    margin:3px;
+}
+.tab {
+    margin-right:0px;
+
+  }
+.phase{
+    text-align: left;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+#sam{
+    display: block;
+    padding-left:0px;
+   
+}
+
+#lbl{
+    margin-left:22px;
+}
+#lbl2{
+    margin-left:42px;
+}
+.summary{
+    margin-top:10px;
+    width:100%;
+    height:350px; 
+    border: 2px solid white; 
+    float:left;
+    background-color: white
+
+}
+
+.arena{
+    height:220px; 
+}
+
+
+.page1_tabs{
+    height:60px;
+    margin: 0px;
+    font-size: 30px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+
+}
+
+/* NORMAL CSS */
+
+.Strategy{
+    width: 1535px; 
+    height : 250px;  
+    border: 2px solid white; 
+    float:left;
+    margin-top:10px;
+    background-color: white
+}
+
+.Target{
+    /* float:right;  */
+    font-size:20px;
+    margin-top:50px;
+}
+
+.hol{
+  /* margin-top:40px;   */
+  padding:30px;
+}
+
+.fun{
+    float:right; 
+    font-size:20px;
+    margin-right:50px;
+}
+
+.extra{
+    margin-left:50px;
+    border: 1px solid#4169E1 ;
+    border-radius: 4px;
+    
+}
+
+.buttons_strategy{
+    font-size:30px; 
+    font-weight: bold;
+    margin-left:50px;
+    width:300px;
+}
+
+
+.table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+   
+}
+
+
+.table tr:hover{
+    background-color: #D3D3D3;
+}
+
+td {
+    /* border: 2px solid #D3D3D3; */
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+   
+}
+
+
+th {
+    /* border: 1px solid #dddddd; */
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+    
+}
+
+.table-responsive{
+    height:310px;
+}
+
+.star{
+    margin-right: 30px;
+    float:right;
+
+}
+.like .fa-star{
+    color: red;
+  }
+  .unlike .fa-star{
+    color: black;
+  }
+
+.close{
+    margin-right: 50px;
+    float:right;
+    font-size: 40px;
+    transform: translate(0%, -25%);
+}
+
+#dialog{
+    /* width:70%; */
+    width: "90%",
+}
+
+.table tbody {
+    display: block; 
+    max-height: 400px; 
+    overflow-y: scroll;
+
+}
+.table thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; 
+}
+
+
+@media only screen and (max-width:1024px){
+    .Strategy{
+        width:100%;
+        height:400px;
+    }
+
+    .Target{
+        float:left;
+        margin-left:0px;
+        margin-top:20px;
+    }
+
+    .buttons_strategy{
+        font-size:40px; 
+        float:left;
+        margin-left:0px;
+        font-weight: bold;
+        width:300px;
+    }
+    .graph_area{
+        margin:0px;
+    }
+
+
+    .table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+       
+    }
+    .highlight td {
+        background-color: #0f0;
+    }
+    td {
+        border: 2px solid #D3D3D3;
+        text-align: left;
+        /* font-size: 20px; */
+        /* width:100%; */
+    }
+    
+    th {
+        border: 1px solid #dddddd;
+        text-align: left; 
+        /* font-size: 20px; */
+        /* width:100%; */
+    }
+    .arena{
+        height:400px; 
+    }
+    
+
+}
+
+.footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color:#4169E1;
+    color: white;
+    text-align: center;
+    height:40px;
+}
+
+.text-h_f{
+    color:white;
+    font-size: 25px;
+
+}
+.namde{
+    padding-left:90px;
+    font-size:20px;
+}
+
+.Strategy-content{
+    margin-top:10px;
+    float:left;
+    margin:30px;
+}
+
+
+.input-cls{
+    margin-left:20px;
+    border: 1px solid#4169E1 ;
+    border-radius: 4px;
+}
+
+.lab-name{
+/* float: left; */
+margin-left:20px;
+font-size:20px;
+}
+
+
+
+.para{
+    margin-top:15px;
+}
+
+.container{
+    margin-top:100px;
+    width: 400px; 
+    height : 520px; 
+    border: 2px solid#4169E1 ;
+}
+
+.row{
+    margin-top:30px;  
+}
+
+.form-group{
+    margin-left:0px;
+}
+
+@media only screen and (max-width:1024px){
+.container{
+    margin-top:100px;
+    width: 400px; 
+    height : 520px; 
+    border: none;
+    }
+    
+}
+
+.Strategies{
+    background-color: white; 
+    height:200px;
+}
+
+.Strategies_block{
+    float: left; 
+    
+}
+
+.Strategies_block span{
+    margin-left:100px;
+}
+
+.column {
+    float: left;
+    width: 33.33%;
+    padding: 0px;
+ 
+  }
+.prak{
+   margin-top:30px;
+   margin-left:10px;
+}
+
+
+@media only screen and (max-width:1024px){
+    .Strategies_block{
+        float: left; 
+        display: block   
+    }
+    .Strategies{
+        background-color: white; 
+        height:270px;
+    }
+    .column {
+        float: left;
+        width: 100%;   
+      }
+    .hol{
+        padding:0px;
+    }
+
+}
+
+.view_button2 {
+    background-color: blue; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 32px; 
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+
+  }
+
+  
+
+.loader {
+    /* position: absolute; */
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+   
+ 
+  }
+  
+  
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

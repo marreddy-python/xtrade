@@ -1,0 +1,137 @@
+{% extends "home.html" %}
+{% block content %}
+
+<div>
+        <div id="kinda" >
+    
+        <div class= "graph_area">
+             
+                <div class = "Strategy-content">
+                <p style = "font-weight: bold; font-size: 30px;"> Settings</p> <br>
+        
+                        
+                            <br>
+                        
+                            <div>
+
+                                    <label class= "lab-name" >Price history period </label>
+                                    <input class="input-cls"  type="text" id="Price_history" name="Price_history"  required>
+                                   
+                                    <select  name = "userinput_ph" style="margin-left:30px;" > 
+                                      <option selected="selected">Days</option>
+                                    </select>  
+                                   
+                                </div>
+
+                                <br>
+                        
+
+                        <div>
+
+                            <label class= "lab-name" >Data grouping interval</label>
+                            <input class="input-cls"  type="text" id="data_grouping_Interval" name="data_grouping_Interval"  required> 
+                           
+                            <select  name = "userinput_dg" id="userinput_dg" style="margin-left:30px;" > 
+                              <option>Minutes</option>
+                              <option>hour</option>
+                              <option>days</option>
+                            </select>  
+                           
+                        
+                        </div>
+                            <br>
+
+                        <div>
+                                <label class= "lab-name" >SMA Interval</label>
+                                <select  name = "userinput_sma" id="userinput_sma" style="margin-left:30px;" >   
+                                  <option>5</option>
+                                  <option>10</option>
+                                  <option>15</option>
+                                </select> 
+                               
+
+                            </div><br>
+
+                            <div>
+                                
+                                <label class= "lab-name" >Position size</label>
+                                <input class="input-cls"  type="text" id="Position_size" name="Position_size"required>
+                            
+                            </div><br>
+                        <div>
+                                
+                            <label class= "lab-name" >Max size of arena</label>
+                            <input class="input-cls"  type="text" id="max_size_arena" name="max_size_arena"required>
+                        
+                        </div><br>
+
+                        <br>
+
+
+                        <div>
+                    
+                        <button style="font-size:20px; font-weight: bold;" type="submit"  style="width:300px;" class="btn btn-primary" name="submit_button" id="Save" value="Save">Save </button> 
+                        <button style="font-size:20px; margin-left:50px; font-weight: bold;" type="submit"  style="width:300px;" class="btn btn-primary" name="submit_button" id="Cancel" value="Cancel">Cancel</button>
+                        
+                    </div>
+
+                </div>
+
+    
+                        
+            </div>     
+
+        
+        </div>
+    
+        </div>
+        <script>
+                
+                $('#Save,#Cancel').on('click',function(){
+                
+                $.ajax({
+                   type: 'POST',
+                   url: "{{ url_for('modulo1.settings')}}",
+                   data: {
+                   main : $(this).attr('value') ,
+                   Price_history : $('#Price_history').val(),
+                   data_grouping_Interval : $('#data_grouping_Interval').val(),
+                   userinput_dg : $('#userinput_dg').val(),
+                   userinput_sma : $('#userinput_sma').val(),
+                   Position_size : $('#Position_size').val(),
+                   max_size_arena : $('#max_size_arena').val(),
+                 },
+                  contentType: "application/x-www-form-urlencoded",
+                  success: function(data){
+                  console.log(data)
+                }
+              });
+             });
+
+        // Loading the saved strategies , updating home template recent strategy values
+        console.log('strategy_names' , JSON.parse('{{ strategy_names | tojson | safe}}') )
+        a = JSON.parse('{{ strategy_names | tojson | safe}}');
+        n = a.length
+        if (n ==5){
+        a = a.slice(0, 4);
+        }
+      
+        for (i = 1;i<=n;i++)
+        {
+        var elem = document.querySelectorAll('#saved_strategy'+i);
+        elem[0].children[0].innerHTML = a[i]
+        }
+
+      // var elem = document.querySelectorAll('#uname');
+      // elem[0].children[0].innerHTML = '{{ uname }}';
+ 
+
+
+             
+    </script>
+    
+    </div>
+
+
+
+{% endblock content %}

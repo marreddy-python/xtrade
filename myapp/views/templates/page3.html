@@ -1,0 +1,288 @@
+{% extends "home.html" %}
+{% block content %}
+
+<div>
+
+
+    <div class="graph_area" style="background-color: white ; ">
+
+        <div class="phase">
+
+            <ul>
+
+                <span id="sam">
+                    <label>Symbol</label>
+                    <select name="userinput_symbol" style="margin-left:10px;margin-top: 20px;">
+                        <option selected="selected">TVIX</option>
+                    </select>
+                </span>
+
+                <span id="sam">
+                    <label>Sort by :</label>
+                    <select name="userinput_symbol" style="margin-left:10px;margin-top: 20px;">
+                        <option selected="selected">Total profit</option>
+                    </select>
+                </span>
+
+
+                <span id="sam">
+
+                    <a class="SeeMore2" href="#">Go to Favourites</a>
+                    
+                </span>
+
+                <span id="sam">
+                    <a href="{{ url_for('modulo1.strategyview') }}">New Strategy</a>
+                </span>
+            </ul>
+        </div>
+
+    </div>
+
+    <div>
+
+        <div id="parent">  
+
+        </div>
+
+
+
+        <script>
+
+                /*$('.SeeMore2').click(function(){
+		            var $this = $(this);
+		            $this.toggleClass('SeeMore2');
+		            if($this.hasClass('SeeMore2')){
+			            $this.text('Favourites');			
+		            } else {
+			        $this.text('All Strategies');
+		            }
+
+                    // console.log($this.text())
+
+                    // based $this.text() value filter the strategies 
+
+                    $.ajax({
+                        type: 'POST',
+                        data:{
+                            id : $this.text(),
+                        },
+                        url: "{{ url_for('modulo1.Strategies1')}}",
+                        contentType: "application/x-www-form-urlencoded",
+                        success: function(data){
+                        console.log(data)
+                        }
+                    });
+
+                });*/
+                 
+
+            $(".SeeMore2").click(function() {
+                var newText = $(this).text() == "Go to Favourites" ? "Go to All Strategies" : "Go to Favourites";
+                $(this).text(newText);
+                console.log($(".SeeMore2").text())
+
+                if ($(".SeeMore2").text()== "Go to All Strategies"){
+                    // $(".strategyfalse").hide();
+                    $(".strategyfalse").fadeOut(400);
+                }
+                else{
+                    // $(".Strategies").show();
+                    $(".Strategies").fadeIn(400);
+                }
+
+            });  
+              
+            // console.log($(".SeeMore2").text())
+            
+
+            var  data = JSON.parse('{{ data | tojson | safe}}');
+          
+            console.log(data)
+
+            n = data.Strategies.length
+            b = data.Strategies[0]
+
+            for (let i = 1; i <= n; i++) {
+                b = data.Strategies[n - i]
+          
+                heading = b.Buy+'_'+b.Sell+'_'+b.Optimization
+
+                strategy_id = b.Strategy_id
+
+               
+                $('#parent').append('<div class="Strategies strategy'+b.isFavourite+'" ><h3  class="disable_button' + i + '" style="color:blue;">' + heading + '</h3> <p  id="remove_strategy'+ strategy_id +'" class="close"> &times;</p> <a href="#" class="liketoggle unlike star" id='+strategy_id +'><i  class="fa fa-star" style="font-size: 1.5em;"></i></a>'+
+                    '<p style="font-size: 20px;">sma angles</p><p style="font-size: 20px;">Buy : <span style="font-weight: bold">' + b.Buy + '</span>' +
+                    '<span style="margin-left: 20px;">Sell : </span><span style="font-weight: bold">' + b.Sell + ' </span><span style="margin-left: 20px;">Optimization : </span>' +
+                    '<span style="font-weight: bold">' + b.Optimization + ' </span></p><p style="font-weight: 800; font-size:20px;"><span>Total profit : </span > <span style="font-weight: bold">' + b.TWENTY_TP + ' </span><span >Profit factor : </span>' +
+                    ' <span style="font-weight: bold">' + b.TWENTY_PF + ' </span><span> %profitable : </span> <span style="font-weight: bold">' + b.TWENTY_PT+ ' </span> <span>  </span></p><p><button class="view_button2">view</button><button class="view_button2" id="disable_button' + i + '">Add to arena</button></p>'+    
+                    '</div>')
+
+                    if (b.isFavourite == true){
+                        $("#"+strategy_id).toggleClass("unlike like");
+                    }
+                    else{
+                        $("#"+strategy_id).toggleClass("unlike unlike"); 
+                    }
+            }
+          
+
+            // sessionStorage.clear();
+
+            $(".view_button2").click(function () {
+                var id = this.id;
+                // X IS THE CURRENT STRATEGY NAME 
+                x = document.getElementsByClassName(id)[0].innerHTML;
+
+                //console.log(x)
+
+                //GLOBAL VARAIABLE FOR ACESSING CLICKED STRATEGY INFORMATION
+                var SHI = 0
+
+                //Getting the clicked strategy information 
+                for(m=0;m<data.Strategies.length;m++){
+                    //b = data.Strategies[(data.Strategies.length-1) - m]
+                    b = data.Strategies[m]
+                    //console.log(data.Strategies[data.Strategies.length-m])
+                    if (b.Strategy == x){
+                        //console.log('success')
+                        SHI = m
+                    }   
+                }
+
+                //console.log(SHI)
+
+            
+                var students = {
+                    "Strategies":[]
+                }; 
+                
+                if (sessionStorage.getItem("ba") ==null){
+                    sessionStorage.setItem("ba",JSON.stringify(students)); 
+                    va = 1;    
+               }
+               else{
+                va = mar()  
+               }
+                
+        
+                // Function to check if it added already added or not 
+                function mar()
+                {
+                    a = JSON.parse(sessionStorage.getItem("ba"))
+                    n = a.Strategies.length
+                    console.log('length of strategies',n)
+                    if(n > 5){
+                        alert('Arena chart limit exceeded') 
+                    }
+                    else{
+                    for(i=0;i<n;i++)
+                    {  
+                        b = a.Strategies[i]
+                       
+                        if(x==b.Strategy ){
+                            alert('already added')
+                            return 0
+                        }
+                    }
+                return 1
+                }
+                }
+ 
+
+            //Adding into the session if not added
+            if(va == 1){
+                var existing = JSON.parse(sessionStorage.getItem("ba"));
+                Required_data = data.Strategies[SHI]
+                existing['Strategies'].push(Required_data)
+                sessionStorage.setItem("ba",JSON.stringify(existing)); 
+              }
+            
+            
+            // Loading count of arena in base templat
+            main = JSON.parse(sessionStorage.getItem("ba")) 
+            n = main.Strategies.length
+            var elem = document.querySelectorAll('#cart');
+            elem[0].children[0].innerHTML = 'Arena('+n+')';
+
+        });
+
+
+            $(".liketoggle").click(function() {
+                // POST REQUEST TO ADD STRATEGEY TO THE FAVOURITE STRATEGIES
+                var id = $(this).attr('id');
+                console.log(id)
+                $.ajax({
+                   type: 'POST',
+                   url: "{{ url_for('modulo1.Strategies1')}}",
+                   data : $(this).attr('id'),
+                   success: function(main_data){
+                        console.log('main_data',main_data)          
+                        $('#'+id).toggleClass("unlike like");
+                        $('#'+id).closest("div").toggleClass('strategyfalse strategytrue')
+                       
+                   }            
+            });
+
+            // $(this).toggleClass("like unlike");
+        });
+
+
+        // Loading the saved strategies,updating home template recent strategy values
+        //console.log('strategy_names' , JSON.parse('{{ strategy_names | tojson | safe}}') )
+        a = JSON.parse('{{ strategy_names | tojson | safe}}');
+        console.log(a)
+    
+        n = a.length
+        // console.log(n)
+
+        if (n ==5){
+        a = a.slice(0, 4);
+        }
+        for (i = 0;i<n;i++)
+        {
+        var elem = document.querySelectorAll('#saved_strategy'+i);
+        elem[0].children[0].innerHTML = a[i]
+        }
+
+
+
+        // Deleteing a strategy
+        
+        $(".close").click(function() {
+            console.log('delete option clicked')
+            var id = $(this).attr('id');
+            // console.log(parseInt(id.match(/\d+/)))
+            var strategy_id = parseInt(id.match(/\d+/)) 
+            console.log(strategy_id)
+
+            $.ajax({
+                   type: 'POST',
+                   url: "{{ url_for('modulo1.delete_strategy')}}",
+                   data : {
+                       'clicked_strategy': parseInt(id.match(/\d+/))
+                    },
+                    success: function(main_data){
+                        console.log('main_data',main_data) 
+
+                        $('#'+strategy_id).closest("div").remove();    
+       
+                   }        
+            });
+        });
+
+
+
+
+
+        </script>
+
+    </div>
+
+
+</div>
+
+{% endblock content %}
+
+
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html>
+    <head> 
+            <script src="https://code.highcharts.com/modules/exporting.js"></script>
+            <script src="https://code.highcharts.com/modules/export-data.js"></script>
+            <!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+
+    </head> 
+<body>
+
+        <div id="container1"></div>
+
+<script>
+
+Highcharts.chart('container1', {
+
+   
+
+    exporting: {
+            enabled: true,
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG',
+                        'separator',
+                        'downloadCSV',
+                        'downloadXLS',
+                    ],
+                    text: 'Export',
+                    theme: {
+                        fill: '#ddd',
+                        stroke: '#888',
+                        states: {
+                            hover: {
+                                fill: '#fcc',
+                                stroke: '#f00'
+                            },
+                            select: {
+                                fill: '#cfc',
+                                stroke: '#0f0'
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+    chart: {
+        type: 'line',
+
+        height:480,
+    },
+   title: {
+        text: ' '
+    },
+   
+    xAxis: {
+        title: {
+            text: 'Time period'
+        },
+        categories: []
+    },
+
+    yAxis: {
+        title: {
+            text: ''
+        },
+        plotLines:[{
+        color: '#FF0000',
+        width: 2,
+        value:0,
+        dashstyle: 'solid'
+    }]
+    },
+
+
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
+    series: [{
+        data: []
+    }]
+});
+
+    </script>
+</body>
+
+
+</html>

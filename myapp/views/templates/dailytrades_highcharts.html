@@ -1,0 +1,189 @@
+<html>
+<head>
+
+ 
+
+        <script src="https://code.jquery.com/jquery-1.8.3.js"></script>
+        <script src="https://code.highcharts.com/stock/highstock.js"></script>
+        <script src="https://code.highcharts.com/stock/highcharts-more.src.js"></script>
+        <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+        <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
+        
+        <!-- <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" type="text/css" /> -->
+
+        <!-- <script type="text/javascript" src="http://www.highcharts.com/js/testing-stock-exporting.js"></script> -->
+
+      
+      </head>
+
+<body>
+
+    <div id="realtime-chart" ></div>
+  
+</body>
+
+<script>
+
+var chartConfig = {
+      chart:{
+        renderTo:'realtime-chart',
+        backgroundColor: 'white',
+        zoomType:'x',
+        height:480,
+        plotBorderColor: '#606063'
+},
+
+  tooltip: {
+    crosshairs: true,
+    shared: true,
+    useHTML: true,
+    hideDelay: 0,
+    enabledIndicators: true,
+ 
+  },
+
+  exporting: {
+            enabled: true,
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG',
+                        'separator',
+                        'downloadCSV',
+                        'downloadXLS',
+                    ],
+                    text: '',
+                    theme: {
+                        fill: '#ddd',
+                        stroke: '#888',
+                        states: {
+                            hover: {
+                                fill: '#fcc',
+                                stroke: '#f00'
+                            },
+                            select: {
+                                fill: '#cfc',
+                                stroke: '#0f0'
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+ 
+rangeSelector: {
+            selected: 0,
+            allButtonsEnabled: true,
+            buttons: [
+            {
+                type: 'day',
+                text: '1D',
+                count: 1,
+            dataGrouping: {
+                forced: true,
+                units: [['minute', [2]]]
+            },
+            }, 
+            ],
+
+            buttonTheme: {
+                width: 30
+            },
+        
+        },
+
+    
+        plotOptions: {
+        series: {
+        cursor: 'pointer',
+
+    }
+},
+
+ series: [{
+            cropThreshold: 0,
+            id: 'means',
+            name: 'Candlestick-Chart',
+            pointInterval: 3600 * 2,
+            data: [],
+            upColor:'white',
+            tooltip: {
+                valueDecimals: 2
+            },
+            
+    },{
+        type:'sma',
+        linkedTo: 'means',
+        color: 'rgb(0, 175, 251)',
+        peroids:10,
+        marker:{
+          enabled:false,
+        }
+       
+    },{
+      type: 'flags',
+      shape: 'circlepin',
+      color:	'#32ea32',
+      fillColor:'#32ea32',
+      width: 16,
+      data: [],
+      onSeries: 'means',
+    },
+    {
+      type: 'flags',
+      shape: 'circlepin',
+      color:	'#fe3232',
+      fillColor:'#fe3232',
+      width: 16,
+      data:[],
+      onSeries: 'means',
+    }],
+
+   
+
+navigator:{
+  enabled:false
+  },
+    scrollbar:{
+      enabled:false
+    },
+
+    xAxis: {
+        gridLineWidth: 1,
+        color:'black',
+        labels: {
+              style: {
+                    color: 'black'
+                  },    
+              },
+    },
+    yAxis: {
+        gridLineWidth: 1,
+        GridLineColor: 'black',
+    },
+   
+};
+
+  chartConfig.series[0].type = 'candlestick';
+  chartConfig.series[0].data = JSON.parse('{{ daily_data | tojson | safe}}');
+  chartConfig.series[2].data  = JSON.parse('{{ Buy_flags | tojson | safe}}');
+  chartConfig.series[3].data  = JSON.parse('{{ Sell_flags | tojson | safe}}');
+
+
+  
+  $('#realtime-chart').highcharts('StockChart', chartConfig);
+ 
+ 
+
+</script>
+</html>
+

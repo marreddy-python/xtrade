@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html>
+    <head> 
+            <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+            <script src="https://code.highcharts.com/highcharts.js"></script>
+            <script src="https://code.highcharts.com/modules/exporting.js"></script>
+            <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    </head>
+<body>
+
+        <div id="container1" style="height: 370px; margin: 0 auto"></div>
+
+<script>
+
+Highcharts.chart('container1', {
+    chart: {
+        type: 'line',
+        height:390,
+
+    },
+
+    title: {
+        text: 'Comparision chart'
+    },
+   
+    xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        title: {
+            text: 'Time period'
+        }
+    },
+    yAxis: {
+        title: {
+            text: 'Total profit'
+        },
+        plotLines:[{
+        color: '#FF0000',
+        width: 2,
+        value:0,
+        dashstyle: 'solid'
+    }]
+    },
+    exporting: {
+            enabled: true,
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG',
+                        'separator',
+                        'downloadCSV',
+                        'downloadXLS',
+                    ],
+                    text: 'Export',
+                    theme: {
+                        fill: '#ddd',
+                        stroke: '#888',
+                        states: {
+                            hover: {
+                                fill: '#fcc',
+                                stroke: '#f00'
+                            },
+                            select: {
+                                fill: '#cfc',
+                                stroke: '#0f0'
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: false
+            },
+            enableMouseTracking: false
+        }
+    },
+
+    series: []
+});
+
+    </script>
+</body>
+
+
+</html>

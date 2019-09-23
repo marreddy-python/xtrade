@@ -1,0 +1,612 @@
+
+{% extends "home.html" %}
+{% block content %}
+
+
+<div class="tab">
+    <button class="tablinks active" onclick="openCity('first_tab')" id="defaultOpen">Daily Trades</button>
+    <button class="tablinks" id = "Performance" onclick="openCity('second_tab')">Performance</button>
+  
+    <div id="tabvalues" > 
+
+    <label >Buy:</label>
+    <label id="Buytab"></label>
+    <label > Sell : </label>
+    <label id = "Selltab"> </label>
+    <label >Optimization : </label>
+    <label id="Optitab" > </label>
+    <label >Stop order : </label>
+    <label id="stop_ordertab"> </label>
+
+    </div>
+ 
+</div>
+
+
+<div id="first_tab"  class="tabcontent" >
+  <div>
+        <div id = "kinda" >
+ 
+ 
+            <!-- <div  class="loader"> </div> -->
+          
+
+            <div class= "graph_area"  style="margin-top: 0px;">
+                <div class = "phase" style="margin-top: 10px;">
+
+            
+                      <span id="sam">
+                          <label >Select Date</label>
+                          <input id="from" type="text" name="date_selector">
+                      </span>
+      
+                     
+                  </div>
+                
+                <!--ONE DAY CHART-->
+                {% with daily_data =  daily_data ,Buy_flags = Buy_flags,Sell_flags = Sell_flags %} 
+                      {% include "dailytrades_highcharts.html" %}
+                {% endwith %} 
+            
+
+ 
+                <div style="margin-left:350px;" class="loader"> </div>  
+              
+
+                <script>
+
+                Buy_flags = JSON.parse('{{ Buy_flags | tojson | safe}}');
+                Sell_flags = JSON.parse('{{ Sell_flags | tojson | safe}}');
+                flags(Buy_flags,Sell_flags)
+
+                 function flags(Buy_flags,Sell_flags){
+
+                    console.log(Buy_flags,Sell_flags)
+                    chartConfig.series[2].data  = Buy_flags
+                    chartConfig.series[3].data  = Sell_flags
+                    
+                    $('#realtime-chart').highcharts('StockChart', chartConfig); 
+                  }
+
+    
+                 $(function() {
+                 
+         var dates = $( "input[name=date_selector]" ).datepicker({
+           
+            onSelect: function( selectedDate ) {
+               var option = $(this).is("input[name=date_selector]")
+                instance = $( this ).data( "datepicker" ),
+                date = $.datepicker.parseDate(
+                     instance.settings.dateFormat || 
+                     $.datepicker._defaults.dateFormat,
+                     selectedDate, instance.settings );
+                dates.not( this ).datepicker( "option", option, date );
+               
+                var startDate=$("input[name=date_selector]")[0].value;
+                // console.log(startDate)
+               
+                var theDate = new Date(startDate);
+                theDate.setDate(theDate.getDate()+1);
+                
+                // console.log(theDate)
+                function convertDate(inputFormat) {
+                    function pad(s) { return (s < 10) ? '0' + s : s; }
+                    var d = new Date(inputFormat)
+                    return [ pad(d.getMonth()+1),pad(d.getDate()), d.getFullYear()].join('/')
+                }
+
+
+
+                var endDate= convertDate(theDate);
+
+                console.log(startDate,endDate)
+              
+                if (startDate!=="" && endDate!=="") {
+                    startDate=startDate.split("/");
+                    endDate=endDate.split("/");
+                    // console.log(startDate,endDate)
+                    var chart = $('#realtime-chart').highcharts();
+                  // console.log(chart)
+                    chart.xAxis[0].setExtremes(
+            Date.UTC(startDate[2], startDate[0]-1, startDate[1]),
+            Date.UTC(endDate[2], endDate[0]-1, endDate[1])
+                    );
+                }
+            }
+                 });
+    })
+
+   
+    // $("#from").datepicker({ dateFormat: "yy-mm-dd"}).datepicker("setDate","7/11/2011" );
+    // $("#from").datepicker().datepicker("setDate", "7/11/2011");
+
+    $( "input[name=date_selector]" ).datepicker("show");
+
+
+                </script>
+
+           
+            </div>
+
+        </div>
+
+
+
+        <!-- DIALOG BOX -->
+        <div id="dialog">
+
+          <table class="table"> 
+            
+              <thead>
+            <tr>
+              <th>Buy Price</th>
+              <th>Sell Price</th>
+              <th>	Buy Value</th>
+              <th>Sell Value</th>
+              <th>Profit/Loss</th>
+              <th>Profit/Loss %</th>
+              <th>	Buy Angle</th>
+              <th>	Sell Angle</th>
+              <th>Optimization</th>
+              <th> Date </th> 
+
+            </tr>
+          </thead>
+
+          <tbody id="tableHtml">
+                      
+            </tbody>
+
+            </table>
+
+          
+        </div>
+
+
+
+        <div class= "summary"> 
+          
+    
+          <p style="font-size: 35px;background-color: #BEBEBE;text-align: center;color:white;">Summary</p>
+          
+          <form style="margin-top:20px;">
+
+              <label class="sum_lbl">Total profit </label>
+              <input class="sum_inp" type="text" id="singleday_Total_Profit" size="10" value="0$">
+
+              <label class="sum_lbl">Profit factor</label>
+              <input class="sum_inp" type="text" id="singleday_Profit_factor" size="10" value="0">
+
+              <label class="sum_lbl">%Profitable</label>
+              <input class="sum_inp" type="text" id="singleday_Profitable" size="10" value="0">
+
+              <!-- <label class="sum_lbl">Max Drawdown</label> 
+              <input class="sum_inp" type="text" id="singleday_MaxDrawdown"  size="10" value="0">-->
+            
+              <p class="sum_lbl" ><a href = "#" id="opener">Show Trades>> </a></p>
+
+          </form>
+      
+        </div> 
+
+      
+      
+      
+
+        <script>
+
+
+
+        // METRIC VALUES FOR SINGLE DAY 
+
+          a =  JSON.parse('{{ Metric_values_singleday | tojson | safe}}');
+
+          if (a != null){
+        
+          $('#singleday_Total_Profit').val(a["Total_Profit"]); 
+          $('#singleday_Profit_factor').val(a["Profit_Factor"]); 
+          $('#singleday_Profitable').val(a["Profitable"]); 
+          $('#singleday_MaxDrawdown').val(a["Max_Drawdown"]); 
+          
+        }
+
+          //GLOBAL VARAIBLE SINGLEDAY_TRADES
+        var Singleday_Trades = JSON.parse('{{ Trades_singleday | tojson | safe}}');
+        
+        // console.log(main_data["Metric_values"])
+        $( "#dialog" ).dialog({
+            autoOpen: false,   
+            width: 1500,  
+            show: {
+              effect: "blind",
+              duration: 1000,   
+            },
+            hide: {
+              effect: "explode",
+              duration: 1000
+            }
+        });
+
+        $( "#opener" ).click(function() {
+         
+          //Get the trades happend in a single day and pass it to dialog box data 
+         
+        
+        $( "#dialog" ).dialog( "open" );
+        
+        //});
+
+    //DIALOG BOX DATA
+    var html = "";
+    
+    n = Singleday_Trades.length
+    console.log(Singleday_Trades)
+    for (var i = 0; i < n; i++){
+
+        html +="<tr>"+
+            "<td>"+ Singleday_Trades[i][0] + "</td>"+
+            "<td>"+ Singleday_Trades[i][1]+ "</td>"+
+            "<td>"+ Singleday_Trades[i][2] + "</td>"+
+            "<td>"+ Singleday_Trades[i][3] + "</td>"+
+            "<td>"+ Singleday_Trades[i][4] + "</td>"+
+            "<td>"+ Singleday_Trades[i][5] + "</td>"+
+            "<td>"+ Singleday_Trades[i][6] + "</td>"+
+            "<td>"+ Singleday_Trades[i][7]+ "</td>"+
+            "<td>"+ Singleday_Trades[i][8] + "</td>"+
+            "<td>"+ Singleday_Trades[i][9]+"</td>"
+    }
+    
+    $("#tableHtml").html(html);
+
+  })
+  
+    </script>
+
+    </div>
+</div>
+
+
+<!-- SECOND TAB -->
+
+<div id="second_tab" style="display: none" class="tabcontent">    
+  <div id = "kinda" >
+    <div class= "graph_area" style="margin-top: 0px;">
+            <div class = "phase" style="margin-top: 0px;"> 
+              <!-- <ul> -->
+
+              <!-- <form>   -->
+                <span id="sam">
+                    <label >Symbol</label>
+                    <select  name = "userinput_symbol" style="margin-left:10px;margin-top: 20px;" >
+                        <option selected="selected">TVIX</option>
+                    </select> 
+                  </span>
+            
+                <span id="sam">
+                    <label >From</label>
+                    <input id="lbl1" type="date" name="start_date">
+                </span>
+
+                <span id="sam">
+                    <label >To</label>
+                    <input id="lbl2" type="date" name="end_date">
+                </span>
+             
+
+              <!-- </form> -->
+              
+            <!-- </ul> -->
+
+            </div>
+
+              {% include'high_performance.html'%}
+
+             
+
+
+            <div>
+
+            </div>
+    </div>
+
+    </div>
+
+    <div class= "summary"> 
+    
+        <p style="font-size: 35px;background-color: #BEBEBE;text-align: center;color:white;">Summary</p>
+          
+        <form style="margin-top:20px;">
+
+            <label class="sum_lbl"><a href="#" class="myHref default_chart_open" id = "Total_Profit">Total profit </a></label>
+            <input class="sum_inp" type="text" id="mytext" size="10" value="0$">
+
+            <label class="sum_lbl"><a href="#" class="myHref" id = "Profit_Factor">Profit factor</a></label>
+            <input class="sum_inp" type="text" id="mytext"  size="10" value="0">
+
+            <label class="sum_lbl"><a href="#" class="myHref" id = "Profitable">%Profitable</a></label>
+            <input class="sum_inp" type="text" id="mytext"  size="10" value="0">
+
+            <!-- <label class="sum_lbl"><a href="#" class="myHref" id = "Max_Drawdown">Max Drawdown</a></label> 
+            <input class="sum_inp" type="text" id="mytext"  size="10" value="0">-->
+          
+        </form>
+
+    </div> 
+
+</div>
+
+
+
+    <div>
+    
+      <div class = "Strategy" >  
+          
+    
+<!-- <form method="POST"> -->
+
+
+  <div class="column">
+
+    <p class="para" style = "font-weight: bold; font-size: 30px;"> Strategy</p>
+    <p  class="para">
+    <label class= "lab-name" for="fname">Buying angle</label>
+    <input class="input-cls" maxlength="8" size="8" type="text" id="buying_angle" name="Buying_angle" required> 
+    <span for="fname" style = "opacity:0.6; font-size:18px;">DEGREES</span> 
+    </p> 
+
+    <p  class="para">
+      <label class= "lab-name" for="fname">Selling angle</label>
+      <input class="input-cls" maxlength="8" size="8" type="text" id="selling_angle" name="selling_angle" required> 
+      <span for="fname" style = "opacity:0.6; font-size:18px;">DEGREES</span> 
+    </p> 
+    
+
+  </div>
+
+
+
+  <div class="column" >
+     
+    <div class="Target">
+      <p  class="para">
+          <input type="checkbox" id = "Optimization_steepness" name="Optimization" value="None" style="zoom:2;"> Optimization-steepness<input  class="input-cls" type="text" id="relative_angle" maxlength="4" size="4" name="relative_angle" style="border:1px solid blue" value=10 />
+          <span for="fname" style = "opacity:0.6; font-size:18px;">relative angle</span> <br>
+      </p>
+
+      <p  class="para">
+        <input type="checkbox" id = "STPODVALUE"  value="None" style="zoom:2;"> STOP Order @ <span style="padding-left:65px;"></span><input class="input-cls"  type="text"  maxlength="4" size="4" id="stop_order" name="stop_order" style="border:1px solid blue;" value=0.3 /> 
+        <span for="fname" style = "opacity:0.6; font-size:18px;">%less than buy</span>
+      </p>
+
+      <p class="hol">
+         
+
+          <button class="btn btn-primary btn-lg" name="submit_button" id="Apply" value="Apply">Apply</button>
+          <button   class="btn btn-primary btn-lg" name="submit_button" id="Save" value="Save">Save </button>
+          <!-- <button class="btn btn-primary btn-lg" name="submit_button" id="Save_and_compare" value="Save_and_compare">Save and compare</button> -->
+      
+       
+          <script>
+
+          
+            // SWITCHING TABS
+
+            function openCity(cityName) {
+                  var i, tabcontent, tablinks;
+                  tabcontent = document.getElementsByClassName("tabcontent");
+                  for (i = 0; i < tabcontent.length; i++) {
+                      tabcontent[i].style.display = "none";
+                  }
+
+                  tablinks = document.getElementsByClassName("tablinks");
+                  for (i = 0; i < tablinks.length; i++) {
+                      tablinks[i].className = tablinks[i].className.replace(" active", "");
+                  }
+  
+                  document.getElementById(cityName).style.display = "block";
+                  event.currentTarget.className += " active";  
+            }
+
+
+              var num = 1;
+        
+
+              var Performance_Data = JSON.parse('{{ Performance | tojson | safe}}');
+
+
+
+              var chart = $('#container1').highcharts();
+            
+              //SUMMARY DATA POINTS 
+              $("#Total_Profit,#Profit_Factor,#Profitable,#Max_Drawdown").on('click', function() {
+                  clicked = event.target.id
+                  chart.yAxis[0].setTitle({ 
+                              text: clicked
+                  }); 
+                  console.log(clicked)
+
+                  console.log(Performance_Data)
+
+                  chart.series[0].setData([])
+
+                  chart.series[0].setData(Performance_Data[clicked])
+                  
+              });
+
+              
+
+
+              $('#Performance').on('click',function(){
+                //DEFAULT CHART
+                console.log(Performance_Data)
+                // console.log(typeof(Performance_Data))
+              
+                var chart = $('#container1').highcharts();
+               
+                if (Performance_Data !== null){
+                      chart.series[0].setData(Performance_Data["Total_Profit"])
+                      chart. yAxis[0].setTitle({ 
+                          text: 'Total_profit',
+                      })
+                      chart.xAxis[0].setCategories(Performance_Data["x"]);
+                      
+
+                      // GET START DATE AND END DATE FROM PERFORMANCE VARAIABLE 
+                      dates = Performance_Data["x"]
+                      from = dates[0]
+                      to = dates[dates.length-1] 
+                      console.log(from,to)
+
+                      a = new Date(from);
+                      b = a.toISOString();   
+                      document.getElementById("lbl1").defaultValue=  formatDate(b) ;
+                      c = new Date(to);
+                      d = c.toISOString();   
+                      document.getElementById("lbl2").defaultValue =  formatDate(d) ;
+                       
+                      function formatDate(date) {
+                          var d = new Date(date),
+                          month = '' + (d.getMonth() + 1),
+                          day = '' + d.getDate(),
+                          year = d.getFullYear();
+                          if (month.length < 2) month = '0' + month;
+                          if (day.length < 2) day = '0' + day;
+                          // console.log([year, month, day].join('-'))
+                          return [year, month, day].join('-');
+                      }
+
+
+                }
+                });
+        
+               
+            
+              // UPDATING THE GLOBAL VARAIABLE BY ADDING THE NEW STARTEGIES
+              $(".loader").hide();
+
+              $('#Apply,#Save,#Save_and_compare').on('click',function(){
+
+                $('.loader').show();
+                // $('.graph_area').hide();
+
+                $.ajax({
+                   type: 'POST',
+                   url: "{{ url_for('modulo1.strategyview')}}",
+                   data: {
+                   main : $(this).attr('value') ,
+                   Buying_angle : $('#buying_angle').attr('value'),
+                   selling_angle : $('#selling_angle').attr('value'),
+                   Optimization : $('#Optimization_steepness' ).attr("checked") ,
+                   relative_angle : $('#relative_angle').attr('value'),
+                   STPODVALUE : $('#STPODVALUE').attr("checked"),
+                   less_than_buy : $('#stop_order').attr('value'),
+                 },
+                  contentType: "application/x-www-form-urlencoded",
+                  success: function(main_data){
+                  console.log(main_data)
+
+                  //$('.graph_area').show();
+                  
+                  $(".loader").hide();
+          
+                  console.log(main_data["Metric_values"])
+                  a = main_data["Metric_values"]
+          
+                  console.log(main_data["Trades_singleday"])
+                
+                  $('#singleday_Total_Profit').val(a["Total_Profit"]); 
+                  $('#singleday_Profit_factor').val(a["Profit_Factor"]); 
+                  $('#singleday_Profitable').val(a["Profitable"]); 
+                  $('#singleday_MaxDrawdown').val(a["Max_Drawdown"]); 
+                  Singleday_Trades = main_data["Trades_singleday"]
+                  Performance_Data  = main_data["Performance"]
+                
+
+                  flags( main_data["Buy_flags"],main_data["Sell_flags"])
+
+                  $('#Buytab').html( $('#buying_angle').attr('value'));
+                $('#Selltab').html( $('#selling_angle').attr('value'));
+                $('#Optitab').html( $('#Optimization_steepness' ).attr("checked"));
+                $('#stop_ordertab').html($('#STPODVALUE').attr("checked"), );
+
+                  
+                
+                }
+              });
+             });
+                // Loading the saved strategies , updating home template recent strategy values
+                console.log('strategy_names' , JSON.parse('{{ strategy_names | tojson | safe}}') )
+                a = JSON.parse('{{ strategy_names | tojson | safe}}');
+                n = a.length
+                if (n ==5){
+                    a = a.slice(0, 4);
+                }
+                for (i = 0;i<n;i++)
+                {
+                    var elem = document.querySelectorAll('#saved_strategy'+i);
+                    elem[0].children[0].innerHTML = a[i]
+                }
+
+             var Strategy_values = JSON.parse('{{ Strategy_values | tojson | safe}}')
+                
+                console.log( 'Strategy_values', Strategy_values)
+
+                $('#Buytab').html(Strategy_values[0]);
+                $('#Selltab').html(Strategy_values[1]);
+                $('#Optitab').html( Strategy_values[2]);
+                $('#stop_ordertab').html(Strategy_values[4] );
+
+
+             </script>
+
+            </p>
+
+    </div>
+
+  </div>
+
+<!-- </form> -->
+
+  <div class="column" style="background-color: #F0F0F0" >
+    
+      <p style="font-size: 35px;background-color:#D3D3D3;text-align: center;color:white;font-weight: bold;">Live trade Strategy</p>
+    
+      <div class="prak">
+
+        <p>
+          <label class= "lab-name">Buy Angle</label>
+          <input class="input-cls" maxlength="4" size="4" type="text" id="mytext"  size="2" value="0" readonly>
+       
+          <label class= "namde"  >Sell Angle </label>
+          <input  class="input-cls" style=" border: 1px solid#4169E1 ;
+          border-radius: 4px; " maxlength="4" size="4" type="text" id="mytext"  size="2" value="0" readonly>
+       
+        </p>
+
+        <p style="padding-top:13px;">
+          <label class= "lab-name"> Stop order </label>
+          <input class="input-cls" maxlength="4" size="4" type="text" id="mytext"  size="2" value="0" readonly> 
+
+          <label class= "namde"  >Steepness</label>
+        <input class="input-cls" maxlength="8" size="8" type="text" id="mytext"  size="2" value="Disabled" readonly>
+  
+        </p>
+
+        <p style= "font-size: 25px;padding-top:7px; ">
+            <input  type="checkbox" value="Yes" style="zoom:2;">
+            <label >Show in graph</label> 
+        </p>
+
+      </div>
+
+  </div>
+
+    </div>
+
+        
+      </div>
+
+
+
+
+      {% endblock content %}

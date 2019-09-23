@@ -1,0 +1,420 @@
+{% extends "home.html" %}
+{% block content %}
+
+<div>
+        <div id="kinda">
+    
+            <!-- TRADES SHOULD SHOW HERE  -->
+    
+            <div class="graph_area" style="height:500px;">
+    
+                <div class="phase">
+    
+                     <ul> 
+    
+                        <span id="sam">
+                            <label>Symbol</label>
+                            <select name="userinput_symbol" style="margin-left:0px;margin-top: 20px;">
+    
+                                <option selected="selected">TVIX</option>
+    
+                            </select>
+                        </span>
+    
+                        <!-- <span id="sam">  
+                            <label>From</label>
+                            <input id="lbl" type="date" name="date_from">
+                        </span>
+    
+    
+                        <span id="sam">
+                            <label>To</label>
+                            <input id="lbl2" type="date" name="date_from">
+                        </span>-->
+    
+                    </ul>
+                </div>
+    
+                <!-- ARENA CHART  -->
+               
+                <div style="margin-top:30px;">
+
+                {% include 'high_arena.html' %}
+                
+            </div>
+
+            </div>
+    
+        </div>
+    
+        <div class="summary arena">
+    
+            <p style="font-size: 35px;background-color: #BEBEBE;text-align: center;color:white;">Dimensions</p>
+            <form class="icyLink">
+    
+                <label class="sum_lbl"><a href="#" id="Total_profit" >Total profit</a> </label>
+                <input class="sum_inp" type="text" id="marsu0" size="10" value="0$">
+    
+    
+                <label class="sum_lbl"><a href="#" id="Profit_factor">Profit factor</a></label>
+                <input class="sum_inp" type="text" id="marsu1" size="10" value="0">
+    
+    
+                <label class="sum_lbl"><a href="#" id ="Profitable">%Profitable</a></label>
+                <input class="sum_inp" type="text" id="marsu2" size="10" value="0">
+    
+                <label class="sum_lbl"><a href="#" id= "Max_Drawdwon">Max Drawdown</a></label> 
+                <input class="sum_inp" type="text" id="marsu3" size="10" value="0">
+
+                
+          
+            </form>
+
+            <div style="margin-top:20px;height:138px; background-color:white" >
+
+                 <p style="font-size: 33px;background-color: #BEBEBE;text-align: center;color:white;">Live strategy</p>  
+                
+                <p style="font-size: 22px;" >
+                    <input class="strgy_main" id="live_trade_strgy" type="checkbox" value="Yes" style="zoom:2;" >
+                    <label >Show in graph</label> 
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+    <!-- STRATEGIES -->
+
+    <div>
+            <div class="Strategy table-responsive " >
+                
+            <table class="table"style="overflow-x:auto;" >
+                <thead>
+                  <tr>
+                    <th>Strategy</th>
+                    <th>parameters</th>
+                    <th>Total Profit </th>
+                    <th>Profit factor</th>
+                    <th>%Profitable </th>
+                    <!-- <th>Max Drawdown</th> -->
+                    <th>Action</th>  
+                    </tr>
+                </thead>
+
+                    <tbody id="tableHtml">
+                      
+                
+                    </tbody>
+             
+                </table>
+
+                    <button style="font-size:15px"> <i class="fa fa-plus-square"></i></button>
+                    <a style="color:blue; font-size:15px;" href="{{ url_for('modulo1.Strategies1') }}">Add more strategies for
+                        comparision</a>
+                    
+              </div>
+    </div>
+
+
+            <script>
+
+/*a = [
+    {Strategy: "24,12,Yes"},
+    {Strategy: "30,15,Yes"},
+    {Strategy: "40,20,Yes"}
+] */
+
+
+var chart = $('#container1').highcharts();
+
+
+main = JSON.parse(sessionStorage.getItem("ba"))
+console.log(main)
+console.log(main.Strategies)
+n = main.Strategies.length   
+console.log(n)
+
+
+//M stores names of the strategies
+m = []
+
+var html = "";
+    for (var i = 0; i < main.Strategies.length; i++){
+      b = main.Strategies[i]
+
+
+    html +="<tr id="+b.Strategy+">"+
+
+            "<td>"
+            + '<p><input class ="must" style="zoom:2.2;" type="checkbox" id="check'+b.Strategy+'" name="check'+b.Strategy+'" checked/>'+
+
+            '<label style="width:20px;height:20px; background-color:black; margin-left:10px;"id="clr'+b.Strategy+'">  </label><label id="siri'+i+'" style="font-size: 20px; margin-left:10px;">'+b.Strategy+'</label></p>' + 
+            
+            "</td>"+
+
+
+            "<td>"+'Buy:'+b.Buy+'  ,Sell:'+b.Sell + '  ,Optimization:'+ b.Optimization  + "</td>"+
+            "<td>"+ b.TWENTY_TP + "</td>"+
+            "<td>"+ b.TWENTY_PF  + "</td>"+
+            "<td>"+  b.TWENTY_PT + "</td>"+
+            // "<td>"+ null + "</td>"+
+            
+            "<td>"+'<span class="mar" id="sam'+i+'"  style="cursor: pointer; background-color:#eee;padding:0.5em;font-weight:bold;onmouseover="this.style.color"=#0F0" >x</span></td>'+"</tr>";
+}
+
+$("#tableHtml").html(html);
+
+var chart = $('#container1').highcharts();
+    
+    colors = ['red','blue','green','black','yellow']
+    
+    
+    // CHART DATA VALUES RANDOM VALUES GENERATION
+
+// on click Total_profit 
+    for(i=0;i<main.Strategies.length;i++){
+        b = main.Strategies[i]
+        someData = []
+        for(j =0 ; j<21;j++){
+            a = b.Total_profit[j]
+            someData.push(a)
+        }   
+        chart.addSeries({
+            data: someData,
+            color:colors[i],
+            name : b.Strategy,
+            id : b.Strategy, 
+        });
+    }
+    chart.xAxis[0].setCategories(b.x);
+
+
+$("#Total_profit").on('click',function(){
+ 
+    var seriesLength = chart.series.length;
+    for(var i = seriesLength - 1; i > -1; i--) {
+        chart.series[i].remove();
+    }
+    for(i=0;i<main.Strategies.length;i++){
+        b = main.Strategies[i]
+
+        someData = []
+        for(j =0 ; j<21;j++){
+            a = b.Total_profit[j]
+            someData.push(a)
+        }   
+        chart.yAxis[0].setTitle({ 
+            text: 'Total_profit',
+        }) 
+        chart.xAxis[0].setCategories(b.x);
+                      
+
+        chart.addSeries({
+            data: someData,
+            color:colors[i],
+            name : b.Strategy,
+            id : b.Strategy, 
+        });
+    }
+});
+
+$("#Profit_factor").on('click',function(){
+   
+    var seriesLength = chart.series.length;
+    for(var i = seriesLength - 1; i > -1; i--) {
+        chart.series[i].remove();
+    }
+    for( i=0;i<main.Strategies.length;i++){
+        b = main.Strategies[i]
+
+        someData = []
+        for(j =0 ; j<21;j++){
+            a = b.Profit_factor[j]
+            someData.push(a)
+        }   
+        chart.yAxis[0].setTitle({ 
+        text: 'Profit_factor',
+        }) 
+        chart.xAxis[0].setCategories(b.x);
+
+        chart.addSeries({
+            data: someData,
+            color:colors[i],
+            name : b.Strategy,
+            id : b.Strategy, 
+        });
+    }
+});
+
+$("#Profitable").on('click',function(){
+    var seriesLength = chart.series.length;
+    for(var i = seriesLength - 1; i > -1; i--) {
+        chart.series[i].remove();
+    }
+    for(i=0;i<main.Strategies.length;i++){ 
+        b = main.Strategies[i]
+
+        someData = []
+        for(j =0 ; j<21;j++){
+            a = b.profitable[j]
+            someData.push(a)
+        }   
+        chart.yAxis[0].setTitle({ 
+        text: '%Profitable',
+        }) 
+        chart.xAxis[0].setCategories(b.x);
+
+        chart.addSeries({
+            data: someData,
+            color:colors[i],
+            name : b.Strategy,
+            id : b.Strategy, 
+        });
+    }
+});
+
+
+
+
+
+for(i=0;i<main.Strategies.length;i++){
+    b = main.Strategies[i]
+    document.getElementById("clr"+b.Strategy,).style.backgroundColor=colors[i];   
+}
+
+
+// CHECK BOX CLICK FUNCTIONALITY
+$('.must').on('change', function() { 
+
+    for(var i = 0; i < main.Strategies.length; i++) { 
+        b = main.Strategies[i]
+        var series = chart.get(b.Strategy);
+        if($('input[name="check'+b.Strategy+'"]').is(':checked')){ 
+            series.show();   
+            document.getElementById("clr"+b.Strategy).style.backgroundColor=chart.series[i].color;   
+       }
+       else{ 
+            series.hide();  
+        }
+    }
+
+});
+
+
+// REMOVING THE STRATEGIES
+$('.mar').click(function(e){
+
+    a = this.id 
+    b = parseInt(a[3])
+    console.log(b)
+
+    var labl = $('#siri'+b);
+    var rvm = labl.text();
+    console.log(rvm)
+
+    $(this).closest('tr').remove()
+
+    //Removing the data values from the chart based on the id   
+    chart.get(rvm).remove(); 
+    //delete main.Strategies[b];
+    var deletedItem = main.Strategies.splice(b,1);
+    
+
+    // UPDATING THE SESSION VALUES
+    sessionStorage.setItem("ba",JSON.stringify(main)); 
+    // CART FUNCTIONALITY
+    main = JSON.parse(sessionStorage.getItem("ba")) 
+    if (main!== null){
+        n = main.Strategies.length
+        var elem = document.querySelectorAll('#cart');
+        elem[0].children[0].innerHTML = 'Arena('+n+')';
+    }
+})
+
+
+//LIVE TRADE STRATEGY
+ live_trade_data = [2500,500,-500,-5000,7000,1000,-200,-800,200,300,-100,-200,300,400,200,-400,-10,2,10]
+    $('.strgy_main').on('change', function() { 
+
+        if($('#live_trade_strgy').is(':checked')){
+
+            chart.addSeries({
+                data:live_trade_data,
+                id:live_trade_strgy,
+                color:'gold',
+                dashStyle: 'longdash',
+                name:'live_trade_strategy'
+            });
+
+        }
+        else{
+            chart.get(live_trade_strgy).remove();
+        }
+    });
+
+
+//MOUSE HOVER EFFECT FOR THE TABLE
+    $("table tr").on('mouseover', function(event) {  
+
+        id = $(this).attr('id')
+
+        console.log(id)
+
+        for(i=0;i<main.Strategies.length;i++){
+            b = main.Strategies[i]
+            if(b.Strategy==id){
+                chart.get(id).setState('hover') 
+
+                //CHANGING THE VALUES OF A DIMENSIONS 
+                $('#marsu0').val( b.TWENTY_TP)
+                $('#marsu1').val( b.TWENTY_PF )
+                $('#marsu2').val( b.TWENTY_PT)
+                
+            }
+            else{
+                chart.get(b.Strategy).setState('inactive')  
+            }
+            
+        }
+       
+    });
+
+    $("table tr").on('mouseleave', function(event) { 
+        id = $(this).attr('id')  
+        for(i=0;i<main.Strategies.length;i++){
+            b = main.Strategies[i]
+            chart.get(b.Strategy).setState();  
+            
+        $('#marsu0').val(0)
+        $('#marsu1').val(0)
+        $('#marsu2').val(0)
+   
+        } 
+    });
+
+
+    // Loading the saved strategies , updating home template recent strategy values
+    console.log('strategy_names' , JSON.parse('{{ strategy_names | tojson | safe}}') )
+    a = JSON.parse('{{ strategy_names | tojson | safe}}');
+    n = a.length
+    if (n ==5){
+    a = a.slice(0, 4);
+    }
+    for (i = 0;i<n;i++)
+    {
+        var elem = document.querySelectorAll('#saved_strategy'+i);
+        elem[0].children[0].innerHTML = a[i]
+    }
+    
+
+    
+
+</script>
+
+{% endblock content %}
+       
