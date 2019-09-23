@@ -218,7 +218,7 @@ def Strategies1():
 
                 Data_loader = DataController()
                 data,strategy_names = Data_loader.getStrategies()
-                print strategy_names,data
+                print (strategy_names,data)
 
                 return render_template("page3.html", data = data ,strategy_names = strategy_names )
 
