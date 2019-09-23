@@ -15,7 +15,7 @@ def check(ENTERED_DATE):
     dt = datetime.fromtimestamp(ENTERED_DATE/1000.0).strftime('%Y-%m-%d')
     year, month, day = (int(x) for x in dt.split('-'))  
     answer = pd.to_datetime(datetime(year, month, day)).weekday_name
-    print answer
+    print (answer)
     #CHECKING WHETHER TO CHANGE DATAGROUPING COUNT VALUE OR NOT
 
     if answer=='Monday':

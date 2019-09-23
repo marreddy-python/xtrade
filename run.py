@@ -15,6 +15,5 @@ app.register_blueprint(modulo1_blueprint,url_prefix='/')
 
 if __name__ == '__main__':  
     app.run(debug=True)    
-    # db.create_all()
-        
+    
     

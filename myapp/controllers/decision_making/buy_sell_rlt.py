@@ -18,7 +18,7 @@ def buy_sell_rlt(buying_angle, selling_angle,relative_angle,angle):
 
     global last_direction,stock_status,UP,DOWN,INSIGNIFICANT,AVAILABLE,UNAVAILABLE
 
-    # print last_direction,stock_status,UP,DOWN,INSIGNIFICANT,AVAILABLE,UNAVAILABLE
+    # print (last_direction,stock_status,UP,DOWN,INSIGNIFICANT,AVAILABLE,UNAVAILABLE)
 
     BUY = 1
     SELL= 2

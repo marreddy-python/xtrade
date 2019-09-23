@@ -61,12 +61,11 @@ class DataDAOPostgreImpl(DataDAOPostgre):
 
     def getTrades(self,symbol,St,end,start):
         
-        print 'xxxxx',start,end
 
         db_data = Trades.query.filter(and_(Trades.Sell_time.between(start,end),Trades.Symbol=='TVIX'))
 
         # print db_data
-        print db_data.count()
+        print (db_data.count())
         fetchdata_length = db_data.count()
          
         TRADES = []
@@ -111,14 +110,14 @@ class DataDAOPostgreImpl(DataDAOPostgre):
                 sell_flags.append(sell_dict)
 
 
-                print '--------------------------------I AM GETTING THE TRADES --------------------------------------------------'
+                print ('--------------------------------I AM GETTING THE TRADES --------------------------------------------------')
        
             else:
                 pass
 
         buy_flags = sorted(buy_flags, key = lambda i: i['x']) 
         sell_flags = sorted(sell_flags, key = lambda i: i['x'])
-        print buy_flags,sell_flags
+        print (buy_flags,sell_flags)
         return TRADES,buy_flags,sell_flags
 
        
@@ -141,22 +140,22 @@ class DataDAOPostgreImpl(DataDAOPostgre):
         start_date = date(a, b, c-1)
         a,b,c = myFunction(end)
         end_date = date(a, b, c+1)
-        print start_date,end_date
+        print (start_date,end_date)
 
         # Filter the daily_metric table based on the day identifiers 
         start_date = str(start_date)
         end_date = str(end_date)
 
-        print start_date,end_date
+        print (start_date,end_date)
 
         current_strategy = St.startegy_values
-        print current_strategy
+        print (current_strategy)
 
         db_fetch = Daily_metric.query.filter(and_( Daily_metric.Day_identifier.between(start_date,end_date), Daily_metric.Symbol=='TVIX',))
         
         fetchdata_length = db_fetch.count()
         
-        print 'fetcheddata_length', fetchdata_length
+        print ('fetcheddata_length', fetchdata_length)
 
         scores = {"Total_Profit": [], "Profit_Factor": [], "Profitable": [],"Max_Drawdown":[],"x":[]} 
        
@@ -188,7 +187,7 @@ class DataDAOPostgreImpl(DataDAOPostgre):
                 # scores["x"].append(e)
 
 
-        print '--------------------------------I AM GETTING THE PERFROMANCE OF A STRATEGYS --------------------------------------------------'
+        print ('--------------------------------I AM GETTING THE PERFROMANCE OF A STRATEGYS --------------------------------------------------')
                  
         return scores
         
@@ -213,12 +212,12 @@ class DataDAOPostgreImpl(DataDAOPostgre):
         # LOADING THE LATEST STORED STRATEGIES
         entities = Strategy.query.order_by(desc(Strategy.Created_at)).limit(10).all()
           
-        print 'length_entities',len(entities)
+        print ('length_entities',len(entities))
 
         for i in range(0,len(entities)):  
 
             # print entities[i].Created_at
-            print entities[i].Symbol
+            print (entities[i].Symbol)
             
             Optimization = entities[i].Optimization
 
@@ -249,8 +248,8 @@ class DataDAOPostgreImpl(DataDAOPostgre):
             starttime = entities[i].Start_time
             endtime = entities[i].End_time
 
-            print 'starttime',starttime
-            print 'endtime',endtime
+            print ('starttime',starttime)
+            print ('endtime',endtime)
 
             a,b,c = myFunction(starttime)
             start_date = str(date(a, b, c))
@@ -258,14 +257,14 @@ class DataDAOPostgreImpl(DataDAOPostgre):
             end_date = str(date(a, b, c+1))
                   
 
-            print start_date,end_date
+            print (start_date,end_date)
               
             # FROM DAILY METRIC GET THE VALUES 
             db_get = Daily_metric.query.filter(and_( Daily_metric.Day_identifier.between(start_date,end_date), Daily_metric.Symbol=='TVIX',))
         
             dailydata_length = db_get.count()
 
-            print 'dailydata_length',dailydata_length
+            print ('dailydata_length',dailydata_length)
 
             Total_Profit = []
             Profit_factor = []
@@ -291,7 +290,7 @@ class DataDAOPostgreImpl(DataDAOPostgre):
                     x.append(d_in_ms)
 
 
-            print start_date,end_date 
+            print (start_date,end_date )
             TWENTY_TP = 0 
             TWENTY_PF = 0
             TWENTY_PT = 0
@@ -328,7 +327,7 @@ class DataDAOPostgreImpl(DataDAOPostgre):
             }
 
             yourdict["Strategies"].append(b)
-            # print yourdict
+            # print (yourdict)
 
             n =  len(yourdict["Strategies"])
             strategy_names = []
@@ -368,7 +367,7 @@ class DataDAOPostgreImpl(DataDAOPostgre):
         
 
         fetchdata_length = db_data.count()
-        print 'fetchdata_length',fetchdata_length
+        print ('fetchdata_length',fetchdata_length)
 
         stock_data = []
             
@@ -385,10 +384,10 @@ class DataDAOPostgreImpl(DataDAOPostgre):
 
             stock_data.append([Time_stamp,Opening,High,Low,close,Volume])
 
-        # print stock_data
+        # print (stock_data)
         import operator
         stock_data = sorted(stock_data, key=operator.itemgetter(0)) 
-        print stock_data
+        print (stock_data)
         return stock_data
             
     

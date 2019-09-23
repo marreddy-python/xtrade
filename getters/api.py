@@ -27,7 +27,7 @@ def td_ameritrade(stock_symbol,START_DATE,END_DATE):
         data['candles'][i]['low'],data['candles'][i]['close'],data['candles'][i]['volume']])
     
     
-    print len(stock_data)
+    print (len(stock_data))
 
     return stock_data
 

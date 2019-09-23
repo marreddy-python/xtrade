@@ -145,7 +145,7 @@ class MarketDAOImpl(MarketDAO):
                 # print('candles are saved successfully')
          
             else: 
-                # print 'data already exists in a database'
+                # print ('data already exists in a database')
                 pass
     
         
@@ -214,9 +214,9 @@ class SMAPreprocessor(StrategyPreprocessor):
 
         High_main = HighChartsAdapter()
 
-        print loaded_data[1][0]
+        print (loaded_data[1][0])
 
-        print len(loaded_data)
+        print (len(loaded_data))
     
         for i in range(0,len(loaded_data)):
             # CHECK IF ANGLE IS ALREADY CALCULATED OR NOT if not calculate
@@ -228,7 +228,7 @@ class SMAPreprocessor(StrategyPreprocessor):
                 endtime = loaded_data[i][0]
                 # checking to decide the end date
                 starttime = check(endtime)
-                print endtime,starttime
+                print (endtime,starttime)
                 a = High_main.getMarketData(symbol,starttime,endtime)
             else:
                 pass
@@ -254,17 +254,17 @@ class HighChartsAdapter(AngleGenerator):
         self.__endTime = None
 
     def getMarketData(self,symbol,startTime,endTime):
-        print 'startTime',startTime
-        print 'endTime',endTime
+        print ('startTime',startTime)
+        print ('endTime',endTime)
 
-        # print startTime,endTime
+        # print (startTime,endTime)
        
         db_data = price_data.query.filter(and_(price_data.Time_stamp.between(startTime,endTime),price_data.stock_symbol=='TVIX'))
         
     
 
         fetchdata_length = db_data.count()
-        print fetchdata_length
+        print (fetchdata_length)
 
         stock_data = []
             
@@ -273,7 +273,7 @@ class HighChartsAdapter(AngleGenerator):
         else:
 
         # CONVERTING FETCHED DATA INTO THE LIST FORMAT INORDER TO SEND TO HIGHCHARTS EXPORT SERVER 
-            for i in range(0,fetchdata_length):
+            '''for i in range(0,fetchdata_length):
 
                 Time_stamp = db_data[i].Time_stamp
                 Opening = db_data[i].Opening_price
@@ -282,9 +282,9 @@ class HighChartsAdapter(AngleGenerator):
                 close = db_data[i].Closing_price
                 Volume = db_data[i].Volume
 
-                stock_data.append([Time_stamp,Opening,High,Low,close,Volume])
+                stock_data.append([Time_stamp,Opening,High,Low,close,Volume])'''
 
-            '''for candle in db_data:
+            for candle in db_data:
 
                 Time_stamp = int(candle.Time_stamp)
                 Opening = candle.Opening_price
@@ -294,16 +294,16 @@ class HighChartsAdapter(AngleGenerator):
                 Volume = candle.Volume
                 
 
-                stock_data.append([Time_stamp,Opening,High,Low,close,Volume])'''
+                stock_data.append([Time_stamp,Opening,High,Low,close,Volume])
 
-                # print stock_data
-           
+                # print (stock_data)
+
             angle = highcharts_export(stock_data)
-            print angle
+            # print angle
             stock_length  = len(stock_data)
-            print stock_length
+            print (stock_length)
             candle_info = stock_data[stock_length-1]
-            print candle_info
+            print (candle_info)
         
      
             score = {"Time_stamp":None ,"Open": None, "High": None,"Low": None, "Close": None,"Volume": None, "Angle": None,}    
@@ -319,7 +319,7 @@ class HighChartsAdapter(AngleGenerator):
             data  = json.dumps(score)
             data = json.loads(data)
 
-            print data 
+            print(data )
 
             Day_identifier = candle_info[0]
 

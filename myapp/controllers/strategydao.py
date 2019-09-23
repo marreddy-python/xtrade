@@ -33,14 +33,14 @@ class StrategyDAO():
             "less_than_buy": s.startegy_values[5]
         }
  
-        print 'score',sc
+        print ('score',sc)
         
         data  = json.dumps(sc)
         score = json.loads(data)
 
        
 
-        print 'SAVED STRATEY',score
+        print ('SAVED STRATEY',score)
  
         Created_at = time.strftime("%a, %d %b %Y %H:%M:%S")
 
@@ -99,7 +99,7 @@ class SMAStrategyProcessor(StrategyProcessor):
         # Get the data from Strategy_Features table
         db_data = Strategy_features.query.with_entities(Strategy_features.Feature).all()
         
-        print 'length_of_angle',len(db_data)
+        print ('length_of_angle',len(db_data))
     
         # fetched_data = db_data.count()
         fetched_data = len(db_data)
@@ -122,7 +122,7 @@ class SMAStrategyProcessor(StrategyProcessor):
                 stock_data.append([Time_stamp,Opening,High,Low,close,Volume,Angle])
 
             
-        print start,end
+        print (start,end)
        
         sc = {
             "buying_angle":s.startegy_values[0] ,
@@ -133,7 +133,7 @@ class SMAStrategyProcessor(StrategyProcessor):
             "less_than_buy": s.startegy_values[5]
         }
  
-        print 'score',sc
+        print ('score',sc)
         
         data  = json.dumps(sc)
         stgy = json.loads(data)
@@ -198,7 +198,7 @@ class SMAStrategyProcessor(StrategyProcessor):
                         decision = buy_sell_rlt_stop(current_strategy["buying_angle"],current_strategy["selling_angle"],current_strategy["relative_angle"],angle,buy_price,price,current_strategy["less_than_buy"])
                         Opti = "Yes"
 
-                    print time,angle,decision
+                    print (time,angle,decision)
 
                     if decision == 1:
                         # update the global buy_price,buy_value,buying_angle,buy_time varaibles
@@ -213,7 +213,7 @@ class SMAStrategyProcessor(StrategyProcessor):
                         # Give same day identifier if the trade happend in the same day 
 
                         sell_price = price 
-                        print price
+                        print (price)
                         sell_value = sell_price * 1400
                         sell_angle = angle
                         sell_time = time
@@ -222,7 +222,7 @@ class SMAStrategyProcessor(StrategyProcessor):
 
                         current_candle_time = time
 
-                        print sell_price,sell_value,sell_angle,sell_time,profit_loss,profit_loss_percentage
+                        print (sell_price,sell_value,sell_angle,sell_time,profit_loss,profit_loss_percentage)
 
             
                         date = datetime.datetime.fromtimestamp(current_candle_time/1000.0)
@@ -244,7 +244,7 @@ class SMAStrategyProcessor(StrategyProcessor):
             #  After metric calculation call total metric values for calculation of metric values for 20days
             
             metric_calc = MetricImpl()
-            print St
+            print (St)
             metric_calc.getMetric(start_date,end_date,St)
           
             metric_calc.Tot_met(start_date,end_date,St)
@@ -349,7 +349,7 @@ class MetricImpl(Metric):
           
             fetchdata_length = db_data.count()
            
-            print fetchdata_length
+            print (fetchdata_length)
         
             # a ARRAY HOLDS BOTH PORFITS/LOSSES 
             a = []
@@ -372,28 +372,28 @@ class MetricImpl(Metric):
             print 'Winning_Trades , losing_Trades',losing_Trades,Winning_Trades
 
             Winning_Trades_sum = sum(Winning_Trades) 
-            print 'Winning_Trades_sum', Winning_Trades_sum
+            # print ('Winning_Trades_sum', Winning_Trades_sum)
             losing_Trades_sum = sum(losing_Trades)
-            print 'losing_Trades_sum',losing_Trades_sum
+            # print ('losing_Trades_sum',losing_Trades_sum)
 
             Profit = Winning_Trades_sum - (-losing_Trades_sum)
            
-            print 'PROFIT',Profit 
+            print ('PROFIT',Profit )
 
-            print 'length_winning_trades,total_trades',len(Winning_Trades),Total_trades
+            print ('length_winning_trades,total_trades',len(Winning_Trades),Total_trades)
             Winning_Trades_length = len(Winning_Trades)
 
             if Winning_Trades_sum !=0 and losing_Trades_sum !=0:
                 Profit_Factor = Winning_Trades_sum / losing_Trades_sum
-                print 'length_winning_trades,total_trades',len(Winning_Trades),Total_trades
+                print ('length_winning_trades,total_trades',len(Winning_Trades),Total_trades)
                 Profitable = float(Winning_Trades_length) / Total_trades
             else:
                 Profit_Factor = 0
                 Profitable = 0
             
-            print 'PROFIT_FACTOR',Profit_Factor
+            print ('PROFIT_FACTOR',Profit_Factor)
 
-            print 'Profitable',Profitable
+            print ('Profitable',Profitable)
 
 
             # Enter these values into the daily trade metrics 
@@ -433,15 +433,15 @@ class MetricImpl(Metric):
 
         Tweenty_days_trades = Trades.query.filter(and_(Trades.Day_identifier.between(st_da,e_da),Trades.Symbol=='TVIX'))
         
-        print Tweenty_days_trades.count()
+        # print (Tweenty_days_trades.count())
 
-        print '------------------------------------SUCCESS----------------------------------'
+        print ('------------------------------------SUCCESS----------------------------------')
 
-        print Tweenty_days_trades.count()
+        print (Tweenty_days_trades.count())
 
         fetchdata_length =  Tweenty_days_trades.count()
 
-        print fetchdata_length
+        print (fetchdata_length)
 
         WIINING_TRADES = []
         LOOSING_TRADES = []
@@ -466,7 +466,7 @@ class MetricImpl(Metric):
             WIINING_TRADES_SUM = sum(WIINING_TRADES) 
             LOOSING_TRADES_SUM = sum(LOOSING_TRADES)
 
-            # print WIINING_TRADES_SUM,LOOSING_TRADES_SUM
+            # print (WIINING_TRADES_SUM,LOOSING_TRADES_SUM)
 
             Profit = WIINING_TRADES_SUM - (-LOOSING_TRADES_SUM)
 
@@ -481,7 +481,7 @@ class MetricImpl(Metric):
                 
             else:
                 WIINING_TRADES_SUM == 0 or LOOSING_TRADES_SUM == 0 
-                print 'CALCULATION OF PROFIT_FACTOR AND PROFITABLE IS NOT POSSIBLE'
+                print ('CALCULATION OF PROFIT_FACTOR AND PROFITABLE IS NOT POSSIBLE')
                 Profit_Factor = 0
                 Profitable = 0
 
@@ -491,4 +491,4 @@ class MetricImpl(Metric):
         db.session.add(data_to_db)
         db.session.commit()
 
-        print '------------------------DONE --------------------------------------'
+        print ('------------------------DONE --------------------------------------')

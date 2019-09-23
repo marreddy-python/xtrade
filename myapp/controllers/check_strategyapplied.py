@@ -11,7 +11,7 @@ def applied_or_not(s,start,end):
         "less_than_buy": s.startegy_values[5]
     }
  
-    print 'score',sc
+    print ('score',sc)
         
     data  = json.dumps(sc)
     score = json.loads(data)
@@ -20,7 +20,7 @@ def applied_or_not(s,start,end):
 
     db_get_strategies =  Trades.query.filter(Trades.Symbol=='TVIX').all()
     fetched_length = len(db_get_strategies)
-    print fetched_length
+    print (fetched_length)
     stored_strategies = []
 
     for st in range(0,fetched_length):
@@ -45,7 +45,7 @@ def strategy_savedornot(s,start,end):
         "less_than_buy": s.startegy_values[5]
     }
  
-    print 'score',sc
+    print ('score',sc)
         
     data  = json.dumps(sc)
     score = json.loads(data)
@@ -54,7 +54,7 @@ def strategy_savedornot(s,start,end):
    
     db_get_strategies =  Strategy.query.filter(Strategy.Symbol=='TVIX').all()
     fetched_length = len(db_get_strategies)
-    print fetched_length
+    print (fetched_length)
     stored_strategies = []
 
     for st in range(0,fetched_length):

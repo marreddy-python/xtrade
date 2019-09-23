@@ -126,9 +126,9 @@ print(a)
 
 startegy_loader = StrategyController()
 b = startegy_loader.saveStrategy(Strategy)
-print b 
+print (b)
 b = startegy_loader.updateStrategy(Strategy,[2,[20,10,'YES'],'TRUE'])
-print b 
+print (b)
 b = startegy_loader.applyStrategy('TVIX',Strategy ,'10000','20000')
-print b''' 
+print (b)'''
 
